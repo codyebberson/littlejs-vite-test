@@ -5,6 +5,35 @@
     - Builds to a zip file
 */
 
+import * as LittleJS from "littlejsengine";
+
+const {
+  setShowSplashScreen,
+  Color,
+  Sound,
+  Medal,
+  ParticleEmitter,
+  PI,
+  engineInit,
+  medalsInit,
+  tile,
+  mouseWasPressed,
+  drawRect,
+  drawTile,
+  vec2,
+  hsl,
+  drawTextScreen,
+  TileLayer,
+  TileLayerData,
+  initTileCollision,
+  randInt,
+  randColor,
+  setCameraPos,
+  setCameraScale,
+  setGravity,
+  setTileCollisionData,
+} = LittleJS;
+
 // show the LittleJS splash screen
 setShowSplashScreen(true);
 
@@ -21,9 +50,12 @@ let particleEmitter;
 ///////////////////////////////////////////////////////////////////////////////
 function gameInit() {
   // create tile collision and visible tile layer
-  initTileCollision(vec2(32, 16));
+  const tileSize = vec2(32, 16);
+  initTileCollision(tileSize);
+
+  const { mainContext, textureInfos } = LittleJS;
   const pos = vec2();
-  const tileLayer = new TileLayer(pos, tileCollisionSize);
+  const tileLayer = new TileLayer(pos, tileSize);
 
   // get level data from the tiles image
   const tileImage = textureInfos[0].image;
@@ -34,10 +66,10 @@ function gameInit() {
     tileImage.width,
     tileImage.height
   ).data;
-  for (pos.x = tileCollisionSize.x; pos.x--; )
-    for (pos.y = tileCollisionSize.y; pos.y--; ) {
+  for (pos.x = tileSize.x; pos.x--; )
+    for (pos.y = tileSize.y; pos.y--; ) {
       // check if this pixel is set
-      const i = pos.x + tileImage.width * (15 + tileCollisionSize.y - pos.y);
+      const i = pos.x + tileImage.width * (15 + tileSize.y - pos.y);
       if (!imageData[4 * i]) continue;
 
       // set tile data
@@ -54,14 +86,11 @@ function gameInit() {
   tileLayer.redraw();
 
   // setup camera
-  // cameraPos = vec2(16, 8);
-  // cameraPos.setData()
-  cameraPos.x = 16;
-  cameraPos.y = 8;
-  cameraScale = 48;
+  setCameraPos(vec2(16, 8));
+  setCameraScale(48);
 
   // enable gravity
-  gravity = -0.01;
+  setGravity(-0.01);
 
   // create particle emitter
   particleEmitter = new ParticleEmitter(
@@ -96,6 +125,8 @@ function gameInit() {
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameUpdate() {
+  const { mousePos, mousePosScreen } = LittleJS;
+
   if (mouseWasPressed(0)) {
     // play sound when mouse is pressed
     sound_click.play(mousePos);
@@ -131,7 +162,7 @@ function gameRenderPost() {
   // draw to overlay canvas for hud rendering
   drawTextScreen(
     "LittleJS Engine Demo",
-    vec2(mainCanvasSize.x / 2, 70),
+    vec2(LittleJS.mainCanvasSize.x / 2, 70),
     80, // position, size
     hsl(0, 0, 1),
     6,

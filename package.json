@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "postinstall": "cp ./node_modules/littlejsengine/build/littlejs.min.js ./public/"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "littlejsengine": "1.9.0",
