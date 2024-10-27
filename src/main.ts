@@ -45,7 +45,7 @@ const medal_example = new Medal(0, "Example Medal", "Welcome to LittleJS!");
 medalsInit("Hello World");
 
 // game variables
-let particleEmitter;
+let particleEmitter: LittleJS.ParticleEmitter;
 
 ///////////////////////////////////////////////////////////////////////////////
 function gameInit() {
@@ -75,7 +75,7 @@ function gameInit() {
       // set tile data
       const tileIndex = 1;
       const direction = randInt(4);
-      const mirror = randInt(2);
+      const mirror = !!randInt(2);
       const color = randColor();
       const data = new TileLayerData(tileIndex, direction, mirror, color);
       tileLayer.setData(pos, data);
@@ -116,8 +116,8 @@ function gameInit() {
     PI, // damping, angleDamping, gravityScale, cone
     0.05,
     0.5,
-    1,
-    1 // fadeRate, randomness, collide, additive
+    true,
+    true // fadeRate, randomness, collide, additive
   );
   particleEmitter.elasticity = 0.3; // bounce when it collides
   particleEmitter.trailScale = 2; // stretch in direction of motion
@@ -151,7 +151,7 @@ function gameUpdatePost() {}
 ///////////////////////////////////////////////////////////////////////////////
 function gameRender() {
   // draw a grey square in the background without using webgl
-  drawRect(vec2(16, 8), vec2(20, 14), hsl(0, 0, 0.6), 0, 0);
+  drawRect(vec2(16, 8), vec2(20, 14), hsl(0, 0, 0.6), 0, false);
 
   // draw the logo as a tile
   drawTile(vec2(21, 5), vec2(4.5), tile(3, 128));
